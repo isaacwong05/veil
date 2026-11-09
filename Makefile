@@ -1,11 +1,12 @@
 # Veil — cross-compiled, freestanding: no host libc anywhere.
 CC      := i686-elf-gcc
 NASM    := nasm
-CFLAGS  := -ffreestanding -O2 -Wall -Wextra
+CFLAGS  := -ffreestanding -O2 -Wall -Wextra -Iinclude
 LDFLAGS := -nostdlib
 BUILD   := build
 
-OBJS := $(BUILD)/boot.o $(BUILD)/kernel.o
+OBJS := $(BUILD)/boot.o $(BUILD)/kernel.o $(BUILD)/vga.o \
+        $(BUILD)/serial.o $(BUILD)/kprintf.o
 
 .PHONY: all run debug clean
 
@@ -17,7 +18,8 @@ $(BUILD):
 $(BUILD)/boot.o: boot/boot.s | $(BUILD)
 	$(NASM) -f elf32 -o $@ $<
 
-$(BUILD)/kernel.o: kernel/kernel.c | $(BUILD)
+# pattern rules: every C file in kernel/ builds itself
+$(BUILD)/%.o: kernel/%.c | $(BUILD)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(BUILD)/veil.elf: $(OBJS) linker.ld
