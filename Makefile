@@ -6,7 +6,7 @@ LDFLAGS := -nostdlib
 BUILD   := build
 
 OBJS := $(BUILD)/boot.o $(BUILD)/kernel.o $(BUILD)/vga.o \
-        $(BUILD)/serial.o $(BUILD)/kprintf.o
+        $(BUILD)/serial.o $(BUILD)/kprintf.o $(BUILD)/gdt.o
 
 .PHONY: all run debug clean
 
