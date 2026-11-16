@@ -79,4 +79,6 @@ void gdt_init(void)
 	 * segment register now points into our table. */
 	kprintf(" GDT loaded: %u entries (flat 4 GiB, kcode/kdata + user + TSS slot)\n",
 		(unsigned)(sizeof(gdt) / sizeof(gdt[0])));
+	/* Interrupts stay OFF here: the IDT (M4) must exist before IF=1 —
+	 * an IRQ firing into a null gate is a triple fault. */
 }

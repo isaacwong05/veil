@@ -5,6 +5,7 @@
 #include "serial.h"
 #include "kprintf.h"
 #include "gdt.h"
+#include "idt.h"
 
 void kmain(void)
 {
@@ -26,6 +27,8 @@ void kmain(void)
 	gdt_init();
 	vga_set_color(VGA_GRAY, VGA_BLACK);
 
+	idt_init();
+
 	for (;;)
-		__asm__ volatile("hlt"); /* no interrupts yet: hlt parks forever */
+		__asm__ volatile("hlt"); /* interrupts ON since M4; nothing can wake us (PIC masked) — M5's PIT tick changes that */
 }
